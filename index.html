@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ตารางเรียน</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="glass"]{--bg1:#dbeafe;--bg2:#ede9fe;--card:rgba(255,255,255,.55);--bd:rgba(255,255,255,.8);--tx:#1e293b;--mut:#64748b;--ac:#6366f1;--blob1:#93c5fd;--blob2:#c4b5fd;--sh:0 8px 30px rgba(99,102,241,.15)}
+[data-theme="night"]{--bg1:#0f0a24;--bg2:#06201e;--card:rgba(255,255,255,.07);--bd:rgba(255,255,255,.15);--tx:#ede9fe;--mut:#a5b4c8;--ac:#34d399;--blob1:#7c3aed;--blob2:#10b981;--sh:0 8px 30px rgba(0,0,0,.4)}
+[data-theme="cream"]{--bg1:#fbf1e1;--bg2:#f1dcc0;--card:rgba(255,250,240,.7);--bd:rgba(160,110,60,.25);--tx:#4a3420;--mut:#8a6d52;--ac:#c2773a;--blob1:#f4c98f;--blob2:#e8a87c;--sh:0 8px 24px rgba(160,110,60,.18)}
+[data-theme="petal"]{--bg1:#ffe4ef;--bg2:#e0f2ff;--card:rgba(255,255,255,.6);--bd:rgba(255,255,255,.9);--tx:#4b2a43;--mut:#8b6a85;--ac:#ec4899;--blob1:#fbcfe8;--blob2:#bae6fd;--sh:0 8px 28px rgba(236,72,153,.15)}
+@media(prefers-color-scheme:dark){:root:not([data-theme]){}}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{font-family:'Prompt','Noto Sans Thai',system-ui,sans-serif;color:var(--tx);background:linear-gradient(135deg,var(--bg1),var(--bg2));background-attachment:fixed;padding:16px;padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(16px,env(safe-area-inset-bottom));overflow-x:hidden;transition:background .6s,color .4s}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.55;z-index:0;animation:float 14s ease-in-out infinite;pointer-events:none}
+.b1{width:340px;height:340px;background:var(--blob1);top:-80px;left:-80px}
+.b2{width:400px;height:400px;background:var(--blob2);bottom:-120px;right:-100px;animation-delay:-6s}
+@keyframes float{50%{transform:translate(40px,30px) scale(1.12)}}
+.wrap{position:relative;z-index:1;max-width:1250px;margin:0 auto}
+.glass{background:var(--card);border:1px solid var(--bd);border-radius:22px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--sh)}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:16px 22px;animation:drop .7s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes drop{from{opacity:0;transform:translateY(-30px)}}
+.clock{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:600;font-variant-numeric:tabular-nums;color:var(--ac);letter-spacing:1px}
+.sep{font-size:2rem;font-weight:300;color:var(--mut)}
+.now{flex:1;min-width:200px;font-size:clamp(1rem,2.2vw,1.35rem);font-weight:500}
+.now small{display:block;font-size:.75rem;color:var(--mut);font-weight:300}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;margin-right:8px;animation:pulse 1.6s infinite}
+.dot.off{background:var(--mut);animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}100%{box-shadow:0 0 0 12px rgba(34,197,94,0)}}
+h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center;animation:fade .8s .2s both}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}}
+.themes{display:flex;gap:6px;flex-wrap:wrap}
+.themes button{font:inherit;font-size:.8rem;padding:6px 14px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;transition:.25s}
+.themes button:hover{transform:translateY(-2px)}
+.themes button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.scroll{overflow-x:auto;padding:14px;animation:fade .9s .3s both}
+.tt{min-width:1000px}
+.row{display:grid;grid-template-columns:90px 1fr;align-items:stretch}
+.head .cells,.lane{display:grid;grid-template-columns:repeat(10,1fr)}
+.hc{text-align:center;font-size:.8rem;color:var(--mut);padding:8px 0;border-left:1px dashed var(--bd)}
+.day{display:flex;align-items:center;justify-content:center;font-weight:600;border-radius:14px;margin:6px 6px 6px 0;color:#fff;font-size:.95rem;transition:.3s}
+.lane{position:relative;height:104px;border-top:1px dashed var(--bd)}
+.lane i{border-left:1px dashed var(--bd)}
+.row.today .day{box-shadow:0 0 0 3px var(--ac),0 6px 18px rgba(0,0,0,.2)}
+.blk{position:absolute;top:8px;bottom:8px;border-radius:14px;padding:8px 11px;color:#fff;cursor:pointer;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.18);transition:transform .3s cubic-bezier(.2,.9,.3,1.3),box-shadow .3s;animation:pop .6s cubic-bezier(.2,.9,.3,1.3) both;border:0;text-align:left;font:inherit}
+@keyframes pop{from{opacity:0;transform:scale(.7) translateY(14px)}}
+.blk:hover,.blk:focus-visible{transform:translateY(-7px) scale(1.03);box-shadow:0 16px 28px rgba(0,0,0,.28);z-index:5;outline:0}
+.blk.active{animation:pop .6s both,glow 2s 1s infinite}
+@keyframes glow{50%{box-shadow:0 0 0 4px rgba(255,255,255,.9),0 0 26px 6px var(--ac)}}
+.blk b{display:block;font-size:.78rem;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.blk span{display:block;font-size:.68rem;opacity:.9;margin-top:3px}
+.hint{text-align:center;color:var(--mut);font-size:.8rem;margin-top:14px}
+.mask{position:fixed;inset:0;background:rgba(10,10,30,.45);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
+.mask.show{display:flex;animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0}}
+.modal{width:min(480px,100%);padding:26px;background:var(--bg1);color:var(--tx);animation:rise .45s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes rise{from{opacity:0;transform:translateY(40px) scale(.9)}}
+.modal .bar{height:8px;border-radius:9px;margin-bottom:16px}
+.modal h2{font-size:1.15rem;line-height:1.4}
+.modal .code{color:var(--mut);font-size:.85rem;margin:2px 0 14px}
+.info{display:grid;grid-template-columns:110px 1fr;gap:10px 8px;font-size:.92rem}
+.info dt{color:var(--mut)}.info dd{margin:0;font-weight:500}
+.close{margin-top:20px;width:100%;padding:10px;border:0;border-radius:12px;background:var(--ac);color:#fff;font:inherit;cursor:pointer;transition:.2s}
+.close:hover{transform:translateY(-2px)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.b3{width:260px;height:260px;background:var(--ac);top:40%;left:45%;opacity:.28;animation-duration:19s;animation-delay:-3s}
+.blob{will-change:transform;transition:background .8s}
+.top{position:relative;overflow:hidden}
+.top::after,.blk::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);pointer-events:none}
+.top::after{animation:sweep 6s 1.2s infinite}
+@keyframes sweep{to{transform:translateX(120%)}}
+.blk:hover::after{animation:sweep .9s ease}
+.glass{transition:background .6s,border-color .6s,box-shadow .6s}
+.clock .s{display:inline-block;animation:tickpop .5s cubic-bezier(.22,1,.36,1)}
+@keyframes tickpop{0%{transform:translateY(-40%) scale(1.25);opacity:.2}100%{transform:none;opacity:1}}
+.hc{animation:fade .7s both}
+.hc:nth-child(1){animation-delay:.35s}.hc:nth-child(2){animation-delay:.4s}.hc:nth-child(3){animation-delay:.45s}.hc:nth-child(4){animation-delay:.5s}.hc:nth-child(5){animation-delay:.55s}.hc:nth-child(6){animation-delay:.6s}.hc:nth-child(7){animation-delay:.65s}.hc:nth-child(8){animation-delay:.7s}.hc:nth-child(9){animation-delay:.75s}.hc:nth-child(10){animation-delay:.8s}
+.day{animation:slideIn .8s cubic-bezier(.22,1,.36,1) both;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s}
+.row:nth-child(2) .day{animation-delay:.3s}.row:nth-child(3) .day{animation-delay:.4s}.row:nth-child(4) .day{animation-delay:.5s}.row:nth-child(5) .day{animation-delay:.6s}.row:nth-child(6) .day{animation-delay:.7s}
+@keyframes slideIn{from{opacity:0;transform:translateX(-40px)}}
+.row:hover .day{transform:scale(1.06)}
+.lane{transition:background .4s}
+.row:hover .lane{background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
+.row.today .day{animation:slideIn .8s both,todayGlow 2.4s 1s infinite}
+@keyframes todayGlow{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--ac) 30%,transparent),0 6px 22px rgba(0,0,0,.25)}}
+.blk{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s,filter .4s;will-change:transform}
+.blk::before{content:"";position:absolute;inset:0;background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.4),transparent 70%);opacity:0;transition:opacity .35s;pointer-events:none}
+.blk:hover::before{opacity:1}
+.blk:hover,.blk:focus-visible{transform:perspective(700px) translateY(-9px) scale(1.045) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));box-shadow:0 22px 36px rgba(0,0,0,.3),0 0 0 2px rgba(255,255,255,.55)}
+.blk:active{transform:translateY(-3px) scale(.98)}
+.lane:has(.blk:hover) .blk:not(:hover){filter:saturate(.6) brightness(.95);opacity:.8}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);width:20px;height:20px;margin:-10px;pointer-events:none;animation:rip .7s ease-out forwards}
+@keyframes rip{to{transform:scale(14);opacity:0}}
+.nowline{position:absolute;top:0;bottom:0;width:2px;background:var(--ac);z-index:6;pointer-events:none;box-shadow:0 0 12px var(--ac);transition:left 1s linear}
+.nowline::before{content:"";position:absolute;top:-4px;left:-4px;width:10px;height:10px;border-radius:50%;background:var(--ac);animation:pulse 1.6s infinite}
+.mask{transition:opacity .3s}
+.modal{transition:none}
+.info>*{animation:fade .5s both}
+.info>:nth-child(1),.info>:nth-child(2){animation-delay:.12s}.info>:nth-child(3),.info>:nth-child(4){animation-delay:.18s}.info>:nth-child(5),.info>:nth-child(6){animation-delay:.24s}.info>:nth-child(7),.info>:nth-child(8){animation-delay:.3s}.info>:nth-child(9),.info>:nth-child(10){animation-delay:.36s}
+.modal .bar{animation:grow .7s cubic-bezier(.22,1,.36,1) both;transform-origin:left}
+@keyframes grow{from{transform:scaleX(0)}}
+.themes button.on{animation:pop .5s cubic-bezier(.2,.9,.3,1.3)}
+:root,[data-theme="glass"]{--ac2:#ec4899}
+[data-theme="night"]{--ac2:#22d3ee}
+[data-theme="cream"]{--ac2:#e11d48}
+[data-theme="petal"]{--ac2:#8b5cf6}
+@keyframes flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.blk{background:linear-gradient(135deg,var(--c),color-mix(in oklab,var(--c) 55%,var(--ac2)),color-mix(in oklab,var(--c) 70%,#000),var(--c));background-size:300% 300%;animation:pop .6s cubic-bezier(.2,.9,.3,1.3) backwards,flow 10s ease-in-out infinite;transition:transform .9s cubic-bezier(.3,.55,.3,1),box-shadow .9s cubic-bezier(.3,.55,.3,1),filter .6s,opacity .6s}
+.blk.active{animation:pop .6s backwards,flow 5s ease-in-out infinite,glow 2s 1s infinite;filter:saturate(1.25)}
+.blk::before{transition:opacity .7s}
+.blk:hover::after{animation:sweep 1.4s ease}
+.day{background:linear-gradient(135deg,var(--c),color-mix(in oklab,var(--c) 55%,var(--ac2)),var(--c));background-size:300% 300%;animation:slideIn .8s cubic-bezier(.22,1,.36,1) backwards,flow 7s ease-in-out infinite;transition:transform .8s cubic-bezier(.3,.55,.3,1),box-shadow .6s}
+.row.today .day{animation:slideIn .8s backwards,todayGlow 2.4s 1s infinite,flow 4s ease-in-out infinite;filter:saturate(1.3) brightness(1.05)}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+<div class="wrap">
+  <div class="glass top">
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="sep">:</div>
+    <div class="now" id="now"></div>
+  </div>
+  <h1><span>📅 ตารางเรียนของฉัน</span>
+    <div class="themes" id="themes"></div>
+  </h1>
+  <div class="glass scroll"><div class="tt" id="tt"></div></div>
+  <p class="hint">คลิกที่รายวิชาเพื่อดูรายละเอียด</p>
+</div>
+<div class="mask" id="mask"><div class="glass modal" id="modal"></div></div>
+
+<script>
+/* =====================================================================
+   ✏️ ส่วนแก้ไขข้อมูลรายวิชา (แก้เฉพาะตรงนี้ได้เลย)
+   ---------------------------------------------------------------------
+   code    = รหัสวิชา
+   name    = ชื่อวิชา
+   color   = สีของวิชา
+   teacher = อาจารย์ผู้สอน        (ยังไม่มีข้อมูลใส่ "-")
+   room    = ห้องเรียน            (ยังไม่มีข้อมูลใส่ "-")
+   sec     = Section ของวิชา
+   sessions = คาบเรียน แต่ละคาบระบุ
+        day   : "จันทร์" | "อังคาร" | "พุธ" | "พฤหัสบดี" | "ศุกร์"
+        start : เวลาเริ่ม เช่น "10:30"
+        end   : เวลาจบ  เช่น "12:00"
+        sec / room / teacher : (ไม่บังคับ) ใส่เมื่อคาบนั้นต่างจากค่าหลัก
+   ===================================================================== */
+const COURSES = [
+  {
+    code: "02201212",
+    name: "กลศาสตร์วิศวกรรมสำหรับวิศวกรรมเกษตร",
+    color: "#6366f1",
+    sec: "700",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "จันทร์", start: "10:30", end: "12:00" },
+      { day: "อังคาร", start: "10:30", end: "12:00" },
+    ],
+  },
+  {
+    code: "01999041",
+    name: "เศรษฐศาสตร์เพื่อการดำเนินชีวิตที่ดี",
+    color: "#0ea5e9",
+    sec: "700",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "อังคาร", start: "09:00", end: "10:30" },
+      { day: "พฤหัสบดี", start: "09:00", end: "10:30" },
+    ],
+  },
+  {
+    code: "02999044",
+    name: "เศรษฐกิจพอเพียงเพื่อการดำรงชีวิต",
+    color: "#10b981",
+    sec: "701",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "อังคาร", start: "13:00", end: "14:30" },
+      { day: "พฤหัสบดี", start: "13:00", end: "14:30" },
+    ],
+  },
+  {
+    code: "01355209",
+    name: "ภาษาอังกฤษเพื่อการสื่อสารในงานอาชีพ",
+    color: "#f59e0b",
+    sec: "-",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "อังคาร", start: "14:30", end: "16:00" },
+      { day: "พฤหัสบดี", start: "14:30", end: "16:00" },
+    ],
+  },
+  {
+    code: "02201131",
+    name: "การเขียนโปรแกรมและระบบอินเทอร์เน็ตของสรรพสิ่งทางการเกษตร",
+    color: "#ec4899",
+    sec: "712/701",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "พุธ", start: "09:00", end: "12:00", sec: "712" },
+      { day: "พฤหัสบดี", start: "10:30", end: "12:30", sec: "701" },
+    ],
+  },
+  {
+    code: "02201413",
+    name: "วิศวกรรมประยุกต์สำหรับการเกษตร",
+    color: "#8b5cf6",
+    sec: "700",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "พุธ", start: "13:00", end: "16:00" },
+    ],
+  },
+  {
+    code: "02231132",
+    name: "คณิตศาสตร์อุตสาหกรรม 2",
+    color: "#ef4444",
+    sec: "700",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "ศุกร์", start: "09:00", end: "12:00" },
+    ],
+  },
+  {
+    code: "02714101",
+    name: "การคิดเชิงวิพากษ์และการแก้ปัญหา",
+    color: "#14b8a6",
+    sec: "-",
+    room: "-",
+    teacher: "-",
+    sessions: [
+      { day: "ศุกร์", start: "13:00", end: "16:00" },
+    ],
+  },
+];
+/* ===================== จบส่วนแก้ไขข้อมูล ===================== */
+
+const DAYS = ["จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์"];
+const DAY_COLORS = ["#eab308","#ec4899","#22c55e","#f97316","#3b82f6"];
+const START = 8, END = 18;
+const $ = id => document.getElementById(id);
+const toH = t => { const [h,m] = t.split(":").map(Number); return h + m/60; };
+const fmt = t => t.replace(":", ".");
+
+/* Build timetable */
+(function build(){
+  let html = '<div class="row head"><div></div><div class="cells">';
+  for (let h = START; h < END; h++) html += `<div class="hc">${h}.00 - ${h+1}.00</div>`;
+  html += '</div></div>';
+  DAYS.forEach((d, di) => {
+    html += `<div class="row" data-d="${di}"><div class="day" style="--c:${DAY_COLORS[di]}">${d}</div><div class="lane">${'<i></i>'.repeat(END-START)}`;
+    let n = 0;
+    COURSES.forEach((c, ci) => c.sessions.forEach((s, si) => {
+      if (s.day !== d) return;
+      const a = toH(s.start), b = toH(s.end);
+      html += `<button class="blk" data-c="${ci}" data-s="${si}" style="left:${(a-START)/(END-START)*100+.2}%;width:${(b-a)/(END-START)*100-.4}%;--c:${c.color};animation-delay:${.4+di*.1+n*.12}s">
+        <b>${c.name}</b><span>${fmt(s.start)}-${fmt(s.end)}</span></button>`;
+      n++;
+    }));
+    html += '</div></div>';
+  });
+  $("tt").innerHTML = html;
+})();
+
+/* Detail popup */
+const mask = $("mask");
+document.addEventListener("click", e => {
+  const bl = e.target.closest(".blk");
+  if (bl) {
+    const c = COURSES[bl.dataset.c], s = c.sessions[bl.dataset.s];
+    $("modal").innerHTML = `<div class="bar" style="background:${c.color}"></div>
+      <h2>${c.name}</h2><div class="code">รหัสวิชา ${c.code}</div>
+      <dl class="info">
+        <dt>วัน</dt><dd>${s.day}</dd>
+        <dt>เวลาเรียน</dt><dd>${fmt(s.start)} - ${fmt(s.end)} น.</dd>
+        <dt>Section</dt><dd>${s.sec || c.sec || "-"}</dd>
+        <dt>ห้องเรียน</dt><dd>${s.room || c.room || "-"}</dd>
+        <dt>อาจารย์ผู้สอน</dt><dd>${s.teacher || c.teacher || "-"}</dd>
+      </dl><button class="close">ปิด</button>`;
+    mask.classList.add("show");
+  } else if (e.target === mask || e.target.closest(".close")) mask.classList.remove("show");
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") mask.classList.remove("show"); });
+
+/* Themes */
+const THEMES = [["glass","กระจกใส"],["night","ราตรี"],["cream","ครีมอุ่น"],["petal","กลีบดอกไม้"]];
+function setTheme(t, save){
+  document.documentElement.dataset.theme = t;
+  document.body.dataset.theme = t;
+  document.querySelectorAll("#themes button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  if (save) try { localStorage.setItem("tt-theme", t); } catch(e){}
+}
+$("themes").innerHTML = THEMES.map(([k,n]) => `<button data-t="${k}">${n}</button>`).join("");
+$("themes").onclick = e => { const b = e.target.closest("button"); if (b) setTheme(b.dataset.t, true); };
+let saved = null; try { saved = localStorage.getItem("tt-theme"); } catch(e){}
+setTheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "night" : "glass"));
+
+/* Real-time clock + current class (Asia/Bangkok) */
+const f = new Intl.DateTimeFormat("en-GB", {timeZone:"Asia/Bangkok",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false,weekday:"short"});
+function tick(){
+  const p = Object.fromEntries(f.formatToParts(new Date()).map(x => [x.type, x.value]));
+  const hh = p.hour === "24" ? "00" : p.hour;
+  $("clock").innerHTML = `${hh}:${p.minute}:<span class="s">${p.second}</span>`;
+  const di = ["Mon","Tue","Wed","Thu","Fri"].indexOf(p.weekday);
+  const t = +hh + p.minute/60 + p.second/3600;
+  let cur = null, next = null;
+  document.querySelectorAll(".row[data-d]").forEach(r => r.classList.toggle("today", +r.dataset.d === di));
+  document.querySelectorAll(".blk").forEach(b => {
+    const c = COURSES[b.dataset.c], s = c.sessions[b.dataset.s];
+    const on = DAYS.indexOf(s.day) === di && t >= toH(s.start) && t < toH(s.end);
+    b.classList.toggle("active", on);
+    if (on) cur = c;
+    if (DAYS.indexOf(s.day) === di && toH(s.start) > t && (!next || toH(s.start) < next.a)) next = {c, a: toH(s.start), s};
+  });
+  $("now").innerHTML = cur
+    ? `<span class="dot"></span>${cur.name}<small>รหัส ${cur.code}</small>`
+    : `<span class="dot off"></span>ไม่มีเรียนในขณะนี้${next ? `<small>วิชาถัดไป: ${next.c.name} เวลา ${fmt(next.s.start)} น.</small>` : ""}`;
+}
+/* Now-line, tilt/spotlight, ripple */
+function line(){
+  const p = Object.fromEntries(f.formatToParts(new Date()).map(x => [x.type, x.value]));
+  const t = (+p.hour % 24) + p.minute/60 + p.second/3600;
+  document.querySelectorAll(".row[data-d]").forEach(r => {
+    const lane = r.querySelector(".lane");
+    let l = lane.querySelector(".nowline");
+    const show = r.classList.contains("today") && t >= START && t <= END;
+    if (!show) { if (l) l.remove(); return; }
+    if (!l) { l = document.createElement("div"); l.className = "nowline"; lane.appendChild(l); }
+    l.style.left = (t-START)/(END-START)*100 + "%";
+  });
+}
+const tt = $("tt");
+tt.addEventListener("pointermove", e => {
+  const b = e.target.closest(".blk"); if (!b) return;
+  const r = b.getBoundingClientRect(), x = (e.clientX-r.left)/r.width, y = (e.clientY-r.top)/r.height;
+  b.style.setProperty("--mx", x*100+"%"); b.style.setProperty("--my", y*100+"%");
+  b.style.setProperty("--ry", (x-.5)*10+"deg"); b.style.setProperty("--rx", (.5-y)*8+"deg");
+});
+tt.addEventListener("pointerout", e => {
+  const b = e.target.closest(".blk"); if (!b) return;
+  b.style.setProperty("--rx","0deg"); b.style.setProperty("--ry","0deg");
+});
+tt.addEventListener("pointerdown", e => {
+  const b = e.target.closest(".blk"); if (!b) return;
+  const r = b.getBoundingClientRect(), s = document.createElement("span");
+  s.className = "rip"; s.style.left = e.clientX-r.left+"px"; s.style.top = e.clientY-r.top+"px";
+  b.appendChild(s); setTimeout(() => s.remove(), 700);
+});
+tick(); line(); setInterval(() => { tick(); line(); }, 1000);
+</script>
+</body>
+</html>
