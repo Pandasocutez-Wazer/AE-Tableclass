@@ -36,9 +36,9 @@ h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-betw
 .themes button:hover{transform:translateY(-2px)}
 .themes button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
 .scroll{overflow-x:auto;padding:14px;animation:fade .9s .3s both}
-.tt{min-width:1000px}
+.tt{min-width:1100px}
 .row{display:grid;grid-template-columns:90px 1fr;align-items:stretch}
-.head .cells,.lane{display:grid;grid-template-columns:repeat(10,1fr)}
+.head .cells,.lane{display:grid;grid-template-columns:repeat(11,1fr)}
 .hc{text-align:center;font-size:.8rem;color:var(--mut);padding:8px 0;border-left:1px dashed var(--bd)}
 .day{display:flex;align-items:center;justify-content:center;font-weight:600;border-radius:14px;margin:6px 6px 6px 0;color:#fff;font-size:.95rem;transition:.3s}
 .lane{position:relative;height:104px;border-top:1px dashed var(--bd)}
@@ -76,7 +76,7 @@ h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-betw
 .clock .s{display:inline-block;animation:tickpop .5s cubic-bezier(.22,1,.36,1)}
 @keyframes tickpop{0%{transform:translateY(-40%) scale(1.25);opacity:.2}100%{transform:none;opacity:1}}
 .hc{animation:fade .7s both}
-.hc:nth-child(1){animation-delay:.35s}.hc:nth-child(2){animation-delay:.4s}.hc:nth-child(3){animation-delay:.45s}.hc:nth-child(4){animation-delay:.5s}.hc:nth-child(5){animation-delay:.55s}.hc:nth-child(6){animation-delay:.6s}.hc:nth-child(7){animation-delay:.65s}.hc:nth-child(8){animation-delay:.7s}.hc:nth-child(9){animation-delay:.75s}.hc:nth-child(10){animation-delay:.8s}
+.hc:nth-child(1){animation-delay:.35s}.hc:nth-child(2){animation-delay:.4s}.hc:nth-child(3){animation-delay:.45s}.hc:nth-child(4){animation-delay:.5s}.hc:nth-child(5){animation-delay:.55s}.hc:nth-child(6){animation-delay:.6s}.hc:nth-child(7){animation-delay:.65s}.hc:nth-child(8){animation-delay:.7s}.hc:nth-child(9){animation-delay:.75s}.hc:nth-child(10){animation-delay:.8s}.hc:nth-child(11){animation-delay:.85s}
 .day{animation:slideIn .8s cubic-bezier(.22,1,.36,1) both;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s}
 .row:nth-child(2) .day{animation-delay:.3s}.row:nth-child(3) .day{animation-delay:.4s}.row:nth-child(4) .day{animation-delay:.5s}.row:nth-child(5) .day{animation-delay:.6s}.row:nth-child(6) .day{animation-delay:.7s}
 @keyframes slideIn{from{opacity:0;transform:translateX(-40px)}}
@@ -128,11 +128,15 @@ h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-betw
 .blk.opt.active{background:color-mix(in srgb,var(--c) 40%,transparent);animation:pop .6s backwards,glow 2s 1s infinite;filter:none}
 .lane:has(.blk:hover) .blk.opt:not(:hover){opacity:.6;filter:none}
 .blk.opt.gone{opacity:0!important;transform:scale(.7) translateY(12px)!important;pointer-events:none;visibility:hidden;transition:opacity .45s,transform .45s,visibility 0s .45s}
+.title{text-align:center;font-size:clamp(1.05rem,3vw,1.7rem);font-weight:500;margin:4px 0 16px;line-height:1.5;animation:titleIn 1s cubic-bezier(.22,1,.36,1) both}
+.title span{font-weight:600;background:linear-gradient(90deg,var(--ac),var(--ac2),var(--ac));background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:flow 6s ease-in-out infinite}
+@keyframes titleIn{from{opacity:0;transform:translateY(-24px);letter-spacing:.12em}}
 </style>
 </head>
 <body>
 <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
 <div class="wrap">
+  <header class="title"><span>ตารางเรียน</span> วิศวกรรมนวัตกรรมเพื่อการเกษตรและอุตสาหกรรม</header>
   <div class="glass top">
     <div class="clock" id="clock">00:00:00</div>
     <div class="sep">:</div>
@@ -185,8 +189,8 @@ const COURSES = [
     color: "#0ea5e9",
     optional: true,   // วิชาเลือก (แสดงแบบจาง)
     sec: "700",
-    room: "-",
-    teacher: "-",
+    room: "ศร.4-304",
+    teacher: "อังคณา ธนานุภาพพันธุ์, วลี สงสุวงค์, พงศ์พันธ์ ศรีเมือง, จุรีวรรณ จันพลา, พชร ใจอารีย์, โสภณ สระทองมา, ทัตเทพ ทวีไทย",
     sessions: [
       { day: "อังคาร", start: "09:00", end: "10:30" },
       { day: "พฤหัสบดี", start: "09:00", end: "10:30" },
@@ -197,8 +201,8 @@ const COURSES = [
     name: "เศรษฐกิจพอเพียงเพื่อการดำรงชีวิต",
     color: "#10b981",
     sec: "701",
-     room: "ศร.4-102",
-    teacher: "นภาพร พันธุ์กมลศิลป์, อัจฉรา ปุราคม, ศิรประภา เปรมเจริญ, ทิพรดา พูลสวัสดิ์, จิรนันท์ ปิยะพงษ์กุล, เกียรติศักดิ์ สนศรี, อภิเดช ช่างชัย ",
+    room: "ศร.4-102",
+    teacher: "นภาพร พันธุ์กมลศิลป์, อัจฉรา ปุราคม, ศิรประภา เปรมเจริญ, ทิพรดา พูลสวัสดิ์, จิรนันท์ ปิยะพงษ์กุล, เกียรติศักดิ์ สนศรี, อภิเดช ช่างชัย",
     sessions: [
       { day: "อังคาร", start: "13:00", end: "14:30" },
       { day: "พฤหัสบดี", start: "13:00", end: "14:30" },
@@ -208,7 +212,7 @@ const COURSES = [
     code: "01355209",
     name: "ภาษาอังกฤษเพื่อการสื่อสารในงานอาชีพ",
     color: "#f59e0b",
-   sec: "726 727 728",
+    sec: "726 727 728",
     room: "ศร.4-609",
     teacher: "จิธัญญา วงษ์วาศ",
     sessions: [
@@ -233,8 +237,8 @@ const COURSES = [
     name: "วิศวกรรมประยุกต์สำหรับการเกษตร",
     color: "#8b5cf6",
     sec: "700",
-    room: "-",
-    teacher: "-",
+    room: "7108 หรือรอการแจ้งจากอาจารย์",
+    teacher: "ศิวลักษณ์ ปฐวีรัตน์",
     sessions: [
       { day: "พุธ", start: "13:00", end: "16:00" },
     ],
@@ -255,11 +259,12 @@ const COURSES = [
     name: "การคิดเชิงวิพากษ์และการแก้ปัญหา",
     color: "#14b8a6",
     optional: true,   // วิชาเลือก (แสดงแบบจาง)
-    sec: "-",
-    room: "-",
-    teacher: "-",
+    sec: "700/701",
+    room: "ศร.3-302",
+    teacher: "วรท อุณหสุทธิยานนท์",
     sessions: [
-      { day: "ศุกร์", start: "13:00", end: "16:00" },
+      { day: "จันทร์", start: "16:00", end: "19:00", sec: "700" },
+      { day: "ศุกร์", start: "13:00", end: "16:00", sec: "701" },
     ],
   },
 ];
@@ -267,7 +272,7 @@ const COURSES = [
 
 const DAYS = ["จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์"];
 const DAY_COLORS = ["#eab308","#ec4899","#22c55e","#f97316","#3b82f6"];
-const START = 8, END = 18;
+const START = 8, END = 19;
 const $ = id => document.getElementById(id);
 const toH = t => { const [h,m] = t.split(":").map(Number); return h + m/60; };
 const fmt = t => t.replace(":", ".");
@@ -306,7 +311,7 @@ document.addEventListener("click", e => {
         <dt>Section</dt><dd>${s.sec || c.sec || "-"}</dd>
         <dt>ห้องเรียน</dt><dd>${s.room || c.room || "-"}</dd>
         <dt>อาจารย์ผู้สอน</dt><dd>${s.teacher || c.teacher || "-"}</dd>
-        ${c.optional ? '<dt>ประเภท</dt><dd>วิชาเลือก (เลือกเรียน 1 ใน 2 วิชา)</dd>' : ""}
+        ${c.optional ? '<dt>ประเภท</dt><dd>เฉพาะนิสิตที่เลือกเรียนวิชาดังกล่าว ( วิชาตัวเลือกเสรีหรือศึกษาทั่วไป )</dd>' : ""}
       </dl><button class="close">ปิด</button>`;
     mask.classList.add("show");
   } else if (e.target === mask || e.target.closest(".close")) mask.classList.remove("show");
