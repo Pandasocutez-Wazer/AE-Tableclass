@@ -114,14 +114,6 @@ h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-betw
 .day{background:linear-gradient(135deg,var(--c),color-mix(in oklab,var(--c) 55%,var(--ac2)),var(--c));background-size:300% 300%;animation:slideIn .8s cubic-bezier(.22,1,.36,1) backwards,flow 7s ease-in-out infinite;transition:transform .8s cubic-bezier(.3,.55,.3,1),box-shadow .6s}
 .row.today .day{animation:slideIn .8s backwards,todayGlow 2.4s 1s infinite,flow 4s ease-in-out infinite;filter:saturate(1.3) brightness(1.05)}
 .ctrl{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.tog{display:flex;align-items:center;gap:8px;font-size:.8rem;cursor:pointer;user-select:none;padding:5px 12px 5px 6px;border-radius:99px;border:1px solid var(--bd);background:var(--card);transition:transform .3s}
-.tog:hover{transform:translateY(-2px)}
-.tog input{position:absolute;opacity:0;pointer-events:none}
-.sw{width:36px;height:20px;border-radius:99px;background:var(--mut);position:relative;transition:background .4s;flex:none}
-.sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .45s cubic-bezier(.3,1.5,.5,1);box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.tog input:checked+.sw{background:var(--ac)}
-.tog input:checked+.sw::after{transform:translateX(16px)}
-.tog input:focus-visible+.sw{outline:2px solid var(--ac);outline-offset:2px}
 .blk.opt{background:color-mix(in srgb,var(--c) 20%,transparent);color:var(--tx);border:2px dashed color-mix(in srgb,var(--c) 70%,transparent);box-shadow:none;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);animation:pop .6s cubic-bezier(.2,.9,.3,1.3) backwards}
 .blk.opt b::before{content:"วิชาเลือก · ";opacity:.7;font-weight:400}
 .blk.opt:hover,.blk.opt:focus-visible{background:color-mix(in srgb,var(--c) 42%,transparent);box-shadow:0 18px 30px rgba(0,0,0,.18)}
@@ -131,6 +123,33 @@ h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-betw
 .title{text-align:center;font-size:clamp(1.05rem,3vw,1.7rem);font-weight:500;margin:4px 0 16px;line-height:1.5;animation:titleIn 1s cubic-bezier(.22,1,.36,1) both}
 .title span{font-weight:600;background:linear-gradient(90deg,var(--ac),var(--ac2),var(--ac));background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:flow 6s ease-in-out infinite}
 @keyframes titleIn{from{opacity:0;transform:translateY(-24px);letter-spacing:.12em}}
+h1{position:relative;z-index:20}
+.dd{position:relative}
+.ddbtn,.dlbtn{font:inherit;font-size:.8rem;display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;transition:transform .3s,background .3s}
+.ddbtn:hover,.dlbtn:hover{transform:translateY(-2px)}
+.dlbtn{background:var(--ac);color:#fff;border-color:var(--ac)}
+.ddbtn b{background:var(--ac);color:#fff;border-radius:99px;padding:0 8px;font-size:.7rem;font-weight:500}
+.ddbtn svg{width:12px;height:12px;transition:transform .35s}
+.dd.open .ddbtn svg{transform:rotate(180deg)}
+.ddmenu{position:absolute;right:0;top:calc(100% + 8px);width:min(330px,86vw);padding:8px;border-radius:18px;border:1px solid var(--bd);background:color-mix(in srgb,var(--bg1) 90%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 18px 40px rgba(0,0,0,.25);opacity:0;transform:translateY(-10px) scale(.96);transform-origin:top right;visibility:hidden;transition:opacity .3s,transform .4s cubic-bezier(.22,1,.36,1),visibility 0s .4s;z-index:40}
+.dd.open .ddmenu{opacity:1;transform:none;visibility:visible;transition-delay:0s}
+.ddi{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:12px;cursor:pointer;font-size:.85rem;transition:background .25s}
+.ddi:hover{background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.ddi input{position:absolute;opacity:0}
+.ck{width:20px;height:20px;border-radius:6px;border:2px solid var(--mut);flex:none;display:grid;place-items:center;transition:.3s}
+.ck::after{content:"";width:10px;height:5px;border:solid #fff;border-width:0 0 2.5px 2.5px;transform:rotate(-45deg) scale(0);margin-top:-2px;transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.ddi input:checked+.ck,.ddi input:indeterminate+.ck{background:var(--ac);border-color:var(--ac)}
+.ddi input:checked+.ck::after{transform:rotate(-45deg) scale(1)}
+.ddi input:indeterminate+.ck::after{height:0;border-width:0 0 2.5px 0;transform:scale(1);margin-top:0}
+.ddi input:focus-visible+.ck{outline:2px solid var(--ac);outline-offset:2px}
+.ddi small{display:block;color:var(--mut);font-size:.72rem}
+.ddsep{height:1px;background:var(--bd);margin:4px 8px}
+.dlopts{display:grid;gap:12px;margin-top:6px}
+.dlopts button{font:inherit;text-align:left;padding:14px 16px;border-radius:16px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;transition:transform .4s cubic-bezier(.22,1,.36,1),background .3s}
+.dlopts button:hover{transform:translateY(-3px);background:color-mix(in srgb,var(--ac) 14%,var(--card))}
+.dlopts.two{grid-template-columns:1fr 1fr}.dlgrp{margin:14px 0 2px;font-weight:500;font-size:.9rem}
+.dlopts b{display:block}.dlopts small{color:var(--mut)}
+.dlopts button.busy{opacity:.6;pointer-events:none}.dlopts button.busy small::after{content:" · กำลังสร้างรูป..."}
 </style>
 </head>
 <body>
@@ -144,7 +163,11 @@ h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-betw
   </div>
   <h1><span>📅 ตารางเรียนของฉัน</span>
     <div class="ctrl">
-      <label class="tog"><input type="checkbox" id="optToggle" checked><span class="sw"></span>แสดงวิชาตัวเลือก</label>
+      <div class="dd" id="dd">
+        <button class="ddbtn" id="ddbtn" aria-haspopup="true" aria-expanded="false">วิชาตัวเลือก <b id="ddcount"></b><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg></button>
+        <div class="ddmenu" id="ddmenu"></div>
+      </div>
+      <button class="dlbtn" id="dlbtn">⬇ ดาวน์โหลดรูป</button>
       <div class="themes" id="themes"></div>
     </div>
   </h1>
@@ -161,6 +184,7 @@ h1{font-size:1.3rem;margin:22px 4px 10px;display:flex;justify-content:space-betw
    name    = ชื่อวิชา
    color   = สีของวิชา
    optional = true ถ้าเป็นวิชาเลือก (จะแสดงแบบจาง และซ่อนได้ด้วยปุ่มติ๊ก)
+   group (ในแต่ละคาบ) = รหัสกลุ่มวิชาตัวเลือก ใช้คู่กับ OPTION_GROUPS ด้านล่าง
    teacher = อาจารย์ผู้สอน        (ยังไม่มีข้อมูลใส่ "-")
    room    = ห้องเรียน            (ยังไม่มีข้อมูลใส่ "-")
    sec     = Section ของวิชา
@@ -192,8 +216,8 @@ const COURSES = [
     room: "ศร.4-304",
     teacher: "อังคณา ธนานุภาพพันธุ์, วลี สงสุวงค์, พงศ์พันธ์ ศรีเมือง, จุรีวรรณ จันพลา, พชร ใจอารีย์, โสภณ สระทองมา, ทัตเทพ ทวีไทย",
     sessions: [
-      { day: "อังคาร", start: "09:00", end: "10:30" },
-      { day: "พฤหัสบดี", start: "09:00", end: "10:30" },
+      { day: "อังคาร", start: "09:00", end: "10:30", group: "eco" },
+      { day: "พฤหัสบดี", start: "09:00", end: "10:30", group: "eco" },
     ],
   },
   {
@@ -224,8 +248,8 @@ const COURSES = [
     code: "02201131",
     name: "การเขียนโปรแกรมและระบบอินเทอร์เน็ตของสรรพสิ่งทางการเกษตร",
     color: "#ec4899",
-    sec: "ปฏิบัติการ 712/บรรยาย 701",
-    room: "ปฏิบัติการ E8303/บรรยาย E8302",
+    sec: "712/701",
+    room: "E8303/E8302",
     teacher: "E2036 อาจารย์ชัยยะ",
     sessions: [
       { day: "พุธ", start: "09:00", end: "12:00", sec: "712" },
@@ -263,10 +287,17 @@ const COURSES = [
     room: "ศร.3-302",
     teacher: "วรท อุณหสุทธิยานนท์",
     sessions: [
-      { day: "จันทร์", start: "16:00", end: "19:00", sec: "700" },
-      { day: "ศุกร์", start: "13:00", end: "16:00", sec: "701" },
+      { day: "จันทร์", start: "16:00", end: "19:00", sec: "700", group: "ct-mon" },
+      { day: "ศุกร์", start: "13:00", end: "16:00", sec: "701", group: "ct-fri" },
     ],
   },
+];
+
+/* กลุ่มวิชาตัวเลือก (แสดงใน dropdown) — id ต้องตรงกับ group ในคาบเรียนด้านบน */
+const OPTION_GROUPS = [
+  { id: "ct-mon", label: "การคิดเชิงวิพากษ์และการแก้ปัญหา", sub: "วันจันทร์ 16.00-19.00 (Sec 700)" },
+  { id: "eco",    label: "เศรษฐศาสตร์เพื่อการดำเนินชีวิตที่ดี", sub: "วันอังคาร และ วันพฤหัสบดี 9.00-10.30" },
+  { id: "ct-fri", label: "การคิดเชิงวิพากษ์และการแก้ปัญหา", sub: "วันศุกร์ 13.00-16.00 (Sec 701)" },
 ];
 /* ===================== จบส่วนแก้ไขข้อมูล ===================== */
 
@@ -328,15 +359,124 @@ function setTheme(t, save){
 }
 $("themes").innerHTML = THEMES.map(([k,n]) => `<button data-t="${k}">${n}</button>`).join("");
 $("themes").onclick = e => { const b = e.target.closest("button"); if (b) setTheme(b.dataset.t, true); };
-/* Optional-course toggle */
-const optToggle = $("optToggle");
-function applyOpt(){
-  document.querySelectorAll(".blk.opt").forEach(b => b.classList.toggle("gone", !optToggle.checked));
-  try { localStorage.setItem("tt-opt", optToggle.checked ? "1" : "0"); } catch(e){}
-  tick();
+/* Optional-course dropdown */
+const optState = {};
+OPTION_GROUPS.forEach(g => optState[g.id] = true);
+try { const sv = JSON.parse(localStorage.getItem("tt-opts")); if (sv) OPTION_GROUPS.forEach(g => { if (typeof sv[g.id] === "boolean") optState[g.id] = sv[g.id]; }); } catch(e){}
+const isShown = s => !s.group || optState[s.group] !== false;
+const sess = b => COURSES[b.dataset.c].sessions[b.dataset.s];
+function syncBlocks(){ document.querySelectorAll(".blk.opt").forEach(b => b.classList.toggle("gone", !isShown(sess(b)))); }
+function buildMenu(){
+  $("ddmenu").innerHTML = `<label class="ddi"><input type="checkbox" data-g="__all"><span class="ck"></span><b>แสดงวิชาตัวเลือกทั้งหมด</b></label><div class="ddsep"></div>`
+    + OPTION_GROUPS.map(g => `<label class="ddi"><input type="checkbox" data-g="${g.id}"><span class="ck"></span><span>${g.label}<small>${g.sub}</small></span></label>`).join("");
 }
-try { if (localStorage.getItem("tt-opt") === "0") optToggle.checked = false; } catch(e){}
-optToggle.addEventListener("change", applyOpt);
+function syncMenu(){
+  const n = OPTION_GROUPS.filter(g => optState[g.id]).length, all = $("ddmenu").querySelector('[data-g="__all"]');
+  OPTION_GROUPS.forEach(g => $("ddmenu").querySelector(`[data-g="${g.id}"]`).checked = optState[g.id]);
+  all.checked = n === OPTION_GROUPS.length; all.indeterminate = n > 0 && n < OPTION_GROUPS.length;
+  $("ddcount").textContent = n + "/" + OPTION_GROUPS.length;
+}
+$("ddmenu").addEventListener("change", e => {
+  const g = e.target.dataset.g;
+  if (g === "__all") OPTION_GROUPS.forEach(o => optState[o.id] = e.target.checked); else optState[g] = e.target.checked;
+  try { localStorage.setItem("tt-opts", JSON.stringify(optState)); } catch(x){}
+  syncMenu(); syncBlocks(); tick();
+});
+$("ddbtn").onclick = e => { e.stopPropagation(); $("ddbtn").setAttribute("aria-expanded", $("dd").classList.toggle("open")); };
+document.addEventListener("click", e => { if (!e.target.closest("#dd")) $("dd").classList.remove("open"); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("dd").classList.remove("open"); });
+
+/* PNG wallpaper export */
+const hexA = (h,a) => { const n = parseInt(h.slice(1),16); return `rgba(${n>>16},${n>>8&255},${n&255},${a})`; };
+const mixHex = (a,b,t) => { const p = h => [1,3,5].map(i => parseInt(h.slice(i,i+2),16)), x = p(a), y = p(b); return "#" + x.map((v,i) => Math.round(v+(y[i]-v)*t).toString(16).padStart(2,"0")).join(""); };
+function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+function wrap(c,t,mw){
+  const segs = window.Intl && Intl.Segmenter ? [...new Intl.Segmenter("th",{granularity:"word"}).segment(t)].map(x => x.segment) : [...t];
+  const L = []; let l = "";
+  for (const s of segs){
+    if (c.measureText(l+s).width <= mw){ l += s; continue; }
+    if (l){ L.push(l); l = ""; }
+    if (c.measureText(s).width <= mw){ l = s; continue; }
+    for (const ch of s){ if (c.measureText(l+ch).width > mw){ L.push(l); l = ch; } else l += ch; }
+  }
+  if (l) L.push(l); return L;
+}
+async function makePNG(kind){
+  const [dev,ori] = kind.split("-"), land = ori === "l", ipad = dev === "ipad";
+  const [sw,sh] = dev === "desktop" ? [2160,3840] : ipad ? [2048,2732] : [1290,2796], W = land ? sh : sw, H = land ? sw : sh, k = Math.min(W,H)/1290;
+  try { await document.fonts.load('600 40px Prompt'); } catch(e){}
+  const cs = getComputedStyle(document.body), v = n => cs.getPropertyValue(n).trim();
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H; const c = cv.getContext("2d");
+  const FF = '"Prompt","Noto Sans Thai",system-ui,sans-serif', N = END-START;
+  let g = c.createLinearGradient(0,0,W,H); g.addColorStop(0,v("--bg1")); g.addColorStop(1,v("--bg2")); c.fillStyle = g; c.fillRect(0,0,W,H);
+  [[.1,.12,.7,"--blob1",.6],[.95,.88,.8,"--blob2",.6],[.5,.5,.45,"--ac",.22]].forEach(([x,y,r,n,a]) => {
+    const R = r*Math.max(W,H)*(land?.75:1), rg = c.createRadialGradient(x*W,y*H,0,x*W,y*H,R); rg.addColorStop(0,hexA(v(n),a)); rg.addColorStop(1,hexA(v(n),0)); c.fillStyle = rg; c.fillRect(0,0,W,H);
+  });
+  const top = land ? 190*k : H*(ipad ? .115 : .265), bot = land ? 40*k : H*(ipad ? .045 : .075), mx = (land ? 60 : 50)*k, pad = 18*k;
+  c.textAlign = "center"; c.fillStyle = v("--ac"); c.font = `600 ${56*k}px ${FF}`; c.fillText("ตารางเรียน", W/2, top-(land?85:70)*k);
+  c.fillStyle = v("--mut"); c.font = `400 ${26*k}px ${FF}`; c.fillText("วิศวกรรมนวัตกรรมเพื่อการเกษตรและอุตสาหกรรม", W/2, top-(land?36:26)*k);
+  rr(c,mx,top,W-2*mx,H-top-bot,34*k); c.fillStyle = v("--card"); c.fill(); c.strokeStyle = v("--bd"); c.lineWidth = 2*k; c.stroke();
+  const gx = mx+pad, gy = top+pad, gw = W-2*mx-2*pad, gh = H-top-bot-2*pad;
+  const lw = (land ? 150 : 100)*k, hh = (land ? 60 : 84)*k;            // lw = day/time label column, hh = header row
+  const cw = land ? (gw-lw)/N : (gw-lw)/5, rhh = land ? (gh-hh)/5 : (gh-hh)/N; // cw = col size, rhh = row size
+  const dpill = (x,y,w,h,i) => {
+    const gr = c.createLinearGradient(x,0,x+w,0); gr.addColorStop(0,DAY_COLORS[i]); gr.addColorStop(1,mixHex(DAY_COLORS[i],v("--ac2"),.45));
+    rr(c,x,y,w,h,22*k); c.fillStyle = gr; c.fill(); c.fillStyle = "#fff"; c.textAlign = "center"; c.font = `600 ${30*k}px ${FF}`; c.fillText(DAYS[i], x+w/2, y+h/2+10*k);
+  };
+  c.setLineDash([8*k,8*k]); c.strokeStyle = hexA(v("--mut"),.3); c.lineWidth = 2*k;
+  for (let i = 0; i <= N; i++){
+    c.beginPath();
+    if (land){ const x = gx+lw+i*cw; c.moveTo(x,gy+hh-8*k); c.lineTo(x,gy+gh); } else { const y = gy+hh+i*rhh; c.moveTo(gx+lw-10*k,y); c.lineTo(gx+gw,y); }
+    c.stroke();
+    if (i < N){
+      c.fillStyle = v("--mut");
+      if (land){ c.textAlign = "center"; c.font = `400 ${20*k}px ${FF}`; c.fillText(`${START+i}.00-${START+i+1}.00`, gx+lw+(i+.5)*cw, gy+hh/2+8*k); }
+      else { c.textAlign = "right"; c.font = `400 ${22*k}px ${FF}`; c.fillText(`${START+i}.00`, gx+lw-18*k, gy+hh+i*rhh+26*k); }
+    }
+  }
+  c.setLineDash([]);
+  DAYS.forEach((d,i) => land ? dpill(gx,gy+hh+i*rhh+4*k,lw-8*k,rhh-8*k,i) : dpill(gx+lw+i*cw+4*k,gy,cw-8*k,hh-12*k,i));
+  c.textAlign = "left";
+  COURSES.forEach(co => co.sessions.forEach(s => {
+    if (!isShown(s)) return;
+    const a = toH(s.start), b = toH(s.end), di = DAYS.indexOf(s.day), opt = !!s.group;
+    const x = land ? gx+lw+(a-START)*cw+3*k : gx+lw+di*cw+4*k, y = land ? gy+hh+di*rhh+4*k : gy+hh+(a-START)*rhh+3*k;
+    const w = land ? (b-a)*cw-6*k : cw-8*k, h = land ? rhh-8*k : (b-a)*rhh-6*k;
+    rr(c,x,y,w,h,20*k);
+    if (opt){ c.fillStyle = hexA(co.color,.22); c.fill(); c.setLineDash([10*k,8*k]); c.strokeStyle = hexA(co.color,.85); c.lineWidth = 3*k; c.stroke(); c.setLineDash([]); }
+    else { const gr = c.createLinearGradient(x,y,x+w,y+h); gr.addColorStop(0,co.color); gr.addColorStop(1,mixHex(co.color,v("--ac2"),.45)); c.fillStyle = gr; c.fill(); }
+    const fc = opt ? v("--tx") : "#fff", lh = 34*k, ty = y+36*k, ny = ty+36*k, mw = w-30*k;
+    c.fillStyle = fc; c.globalAlpha = .85; c.font = `400 ${21*k}px ${FF}`; c.fillText(`${fmt(s.start)}-${fmt(s.end)}`, x+16*k, ty); c.globalAlpha = 1;
+    c.font = `500 ${25*k}px ${FF}`;
+    let L = wrap(c,co.name,mw); const max = Math.max(1,Math.floor((y+h-ny-8*k)/lh)+1);
+    if (L.length > max){ L = L.slice(0,max); let t = L[max-1]; while (t && c.measureText(t+"…").width > mw) t = t.slice(0,-1); L[max-1] = t+"…"; }
+    L.forEach((t,i) => c.fillText(t, x+16*k, ny+i*lh));
+  }));
+  return new Promise(r => cv.toBlob(r,"image/png"));
+}
+$("dlbtn").onclick = () => {
+  const btn = (id,t,sz) => `<button data-dl="${id}"><b>${t}</b><small>${sz}</small></button>`;
+  $("modal").innerHTML = `<div class="bar" style="background:linear-gradient(90deg,var(--ac),var(--ac2))"></div>
+    <h2>ดาวน์โหลดตารางเรียน (.png)</h2><div class="code">รูปจะใช้ธีมและวิชาตัวเลือกที่เลือกไว้ตอนนี้</div>
+    <div class="dlgrp">📱 iPhone / โทรศัพท์มือถือ</div>
+    <div class="dlopts two">${btn("phone-p","แนวตั้ง","1290 × 2796 px")}${btn("phone-l","แนวนอน","2796 × 1290 px")}</div>
+    <div class="dlgrp">💻 iPad</div>
+    <div class="dlopts two">${btn("ipad-p","แนวตั้ง","2048 × 2732 px")}${btn("ipad-l","แนวนอน","2732 × 2048 px")}</div>
+    <div class="dlgrp">🖥️ คอมพิวเตอร์ Desktop</div>
+    <div class="dlopts">${btn("desktop-l","แนวนอน 16:9","3840 × 2160 px (4K)")}</div>
+    <button class="close">ปิด</button>`;
+  mask.classList.add("show");
+};
+document.addEventListener("click", async e => {
+  const d = e.target.closest("[data-dl]"); if (!d) return;
+  d.classList.add("busy");
+  try {
+    const blob = await makePNG(d.dataset.dl), a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = `timetable-${d.dataset.dl}.png`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  } catch(err){ alert("สร้างรูปไม่สำเร็จ ลองใหม่อีกครั้ง"); }
+  d.classList.remove("busy");
+});
 let saved = null; try { saved = localStorage.getItem("tt-theme"); } catch(e){}
 setTheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "night" : "glass"));
 
@@ -352,7 +492,7 @@ function tick(){
   document.querySelectorAll(".row[data-d]").forEach(r => r.classList.toggle("today", +r.dataset.d === di));
   document.querySelectorAll(".blk").forEach(b => {
     const c = COURSES[b.dataset.c], s = c.sessions[b.dataset.s];
-    if (c.optional && !$("optToggle").checked) { b.classList.remove("active"); return; }
+    if (!isShown(s)) { b.classList.remove("active"); return; }
     const on = DAYS.indexOf(s.day) === di && t >= toH(s.start) && t < toH(s.end);
     b.classList.toggle("active", on);
     if (on) cur = c;
@@ -392,7 +532,7 @@ tt.addEventListener("pointerdown", e => {
   s.className = "rip"; s.style.left = e.clientX-r.left+"px"; s.style.top = e.clientY-r.top+"px";
   b.appendChild(s); setTimeout(() => s.remove(), 700);
 });
-if (!optToggle.checked) applyOpt();
+buildMenu(); syncMenu(); syncBlocks();
 tick(); line(); setInterval(() => { tick(); line(); }, 1000);
 </script>
 </body>
